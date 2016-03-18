@@ -1,3 +1,14 @@
 from django.contrib import admin
 
-# Register your models here.
+from shopping.models import ListItem
+from shopping.models import ShoppingList
+
+
+@admin.register(ListItem)
+class ListItemAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(ShoppingList)
+class ShoppingListAdmin(admin.ModelAdmin):
+    pass
