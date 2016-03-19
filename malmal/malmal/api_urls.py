@@ -5,4 +5,5 @@ from django.conf.urls import url
 urlpatterns = [
     url('', include('diet.urls')),
     url('', include('shopping.urls')),
+    url('', include('fridge.urls')),
 ]

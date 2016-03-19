@@ -37,4 +37,39 @@ class ShoppingListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ShoppingList
-        fields = ('id', 'weekdays', 'diet', 'list_items')
+        fields = ('id', 'weekdays', 'diet', 'list_items', 'done')
+
+
+class CompareFridgeSerializer(serializers.ModelSerializer):
+    diet = serializers.IntegerField(source='diet.pk')
+    list_items = serializers.SerializerMethodField()
+
+    def get_list_items(self, shopping_list):
+        fridge = shopping_list.diet.fridge_set.first()
+        items_to_check = []
+        for listitem in shopping_list.listitem_set.all():
+            product = listitem.product
+            fridgeitem = fridge.fridgeitem_set.filter(product=product).first()
+            if fridgeitem is not None:
+                ask_about = 0
+                if fridgeitem.amount - listitem.amount >= 0:
+                    ask_about = listitem.amount
+                elif fridgeitem.amount - listitem.amount < 0:
+                    ask_about = fridgeitem.amount
+
+                if ask_about == 0:
+                    listitem.delete()
+                else:
+                    listitem.amount = ask_about
+                    items_to_check.append(listitem)
+
+        return [ListItemSerializer(item).data for item in items_to_check]
+
+    class Meta:
+        model = ShoppingList
+        fields = ('id', 'diet', 'list_items')
+
+
+class FridgeStatusSerializer(serializers.Serializer):
+    item_id = serializers.IntegerField()
+    lack = serializers.BooleanField()

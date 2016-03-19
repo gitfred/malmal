@@ -32,15 +32,19 @@ class MealItemSerializer(serializers.ModelSerializer):
 class MealSerializer(serializers.ModelSerializer):
     meal_items = MealItemSerializer(source='mealitem_set',
                                     read_only=True, many=True)
-    time = serializers.DateTimeField(format='%s')
+    time = serializers.TimeField(format='%H:%M')
 
     class Meta:
         model = Meal
-        fields = ('id', 'name', 'meal_items', 'time')
+        fields = ('id', 'name', 'recipe', 'meal_items', 'time')
 
 
 class DietDaySerializer(serializers.ModelSerializer):
-    meals = MealSerializer(source='meal_set', read_only=True, many=True)
+    meals = serializers.SerializerMethodField()
+
+    def get_meals(self, dietday):
+        return [MealSerializer(meal).data for meal in
+                dietday.meal_set.order_by('time')]
 
     class Meta:
         model = DietDay

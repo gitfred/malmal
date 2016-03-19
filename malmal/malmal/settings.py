@@ -44,6 +44,7 @@ INSTALLED_APPS = (
     'diet',
     'product',
     'shopping',
+    'fridge',
 )
 
 MIDDLEWARE_CLASSES = (

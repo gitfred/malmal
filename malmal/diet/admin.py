@@ -24,3 +24,7 @@ class MealAdmin(admin.ModelAdmin):
 @admin.register(MealItem)
 class MealItemAdmin(admin.ModelAdmin):
     pass
+    # def formfield_for_foreignkey(self, db_field, request, **kwargs):
+    #     if db_field.name == "product":
+    #         kwargs["queryset"] = MealItem.objects.order_by('product__name')
+    #     return super().formfield_for_foreignkey(db_field, request, **kwargs)
