@@ -21,9 +21,9 @@ class CompareFridgeListView(generics.RetrieveAPIView):
         shopping_list = self.get_object()
         fridge = shopping_list.diet.fridge_set.first()
         for item in data:
-            if item['lack'] != 'true':
+            if item['lack'] is False:
                 continue
-            listitem = shopping_list.listitem_set.filter(id=item['id'])
+            listitem = shopping_list.listitem_set.filter(id=item['id']).first()
             product = listitem.product
             fridgeitem = fridge.fridgeitem_set.filter(product=product).first()
 
