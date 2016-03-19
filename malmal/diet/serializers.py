@@ -36,7 +36,7 @@ class MealSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Meal
-        fields = ('id', 'meal_items', 'time')
+        fields = ('id', 'name', 'meal_items', 'time')
 
 
 class DietDaySerializer(serializers.ModelSerializer):
